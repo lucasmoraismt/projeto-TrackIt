@@ -7,8 +7,6 @@ import UserContext from "../contexts/UserContext";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Today from "./Today";
-import Navbar from "./Navbar";
-import BottomBar from "./BottomBar";
 import Habits from "./Habits";
 
 export default function App() {
@@ -25,17 +23,15 @@ export default function App() {
             <SignUp />
           </Route>
         </Switch>
-        <Switch>
-          <Route path="/today" exact>
-            <Today />
-          </Route>
-          <Route path="/habits" exact>
-            <Habits />
-          </Route>
-          {/* <Route path="/history" exact>
+        <Route path="/today" exact>
+          <Today />
+        </Route>
+        <Route path="/habits" exact>
+          <Habits />
+        </Route>
+        {/* <Route path="/history" exact>
             <History />
           </Route> */}
-        </Switch>
       </BrowserRouter>
     </UserContext.Provider>
   );

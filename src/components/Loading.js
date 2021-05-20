@@ -4,7 +4,7 @@ import loading from "../assets/loading.gif";
 export default function Loading() {
   return (
     <Load>
-      <img src={loading} />
+      <img src={loading} alt="Loading" />
     </Load>
   );
 }

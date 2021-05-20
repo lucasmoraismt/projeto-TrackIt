@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 
@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <Header>
       <Logo>TrackIt</Logo>
-      <img src={user.image} />
+      <img src={user.image} alt="User" />
     </Header>
   );
 }
