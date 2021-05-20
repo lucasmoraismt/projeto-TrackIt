@@ -7,6 +7,9 @@ import UserContext from "../contexts/UserContext";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Today from "./Today";
+import Navbar from "./Navbar";
+import BottomBar from "./BottomBar";
+import Habits from "./Habits";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -26,6 +29,12 @@ export default function App() {
           <Route path="/today" exact>
             <Today />
           </Route>
+          <Route path="/habits" exact>
+            <Habits />
+          </Route>
+          {/* <Route path="/history" exact>
+            <History />
+          </Route> */}
         </Switch>
       </BrowserRouter>
     </UserContext.Provider>
