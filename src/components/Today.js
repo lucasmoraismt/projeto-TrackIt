@@ -17,7 +17,6 @@ export default function Today() {
   const { user } = useContext(UserContext);
   const { ratio, setRatio } = useContext(TasksContext);
   const [todayTasks, setTodayTasks] = useState([]);
-  const [isLoading, setIsLoading] = useState([]);
 
   useEffect(() => {
     const config = {

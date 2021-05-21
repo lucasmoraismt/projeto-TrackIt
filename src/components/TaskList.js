@@ -15,9 +15,13 @@ export default function TaskList({ todayTasks, setTodayTasks }) {
   let tasksDone = todayTasks.reduce((acc, t) => (t.done ? (acc += 1) : acc), 0);
 
   useEffect(() => setRatio(Math.round((100 * tasksDone) / tasksNumber)));
+  let isTaskLoading = false;
 
-  console.log(tasksDone, ratio);
   function toggle(task) {
+    if (isTaskLoading) {
+      return;
+    }
+    isTaskLoading = true;
     const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -39,9 +43,12 @@ export default function TaskList({ todayTasks, setTodayTasks }) {
           }
         });
         setTodayTasks([...todayTasks]);
-        setRatio(((100 * tasksDone) / todayTasks.length).toFixed(0));
+        isTaskLoading = false;
       });
-      request.catch(() => alert("Erro ao atualizar tarefa"));
+      request.catch(() => {
+        alert("Erro ao atualizar tarefa");
+        isTaskLoading = false;
+      });
     } else {
       const request = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${task.id}/check`,
@@ -60,8 +67,12 @@ export default function TaskList({ todayTasks, setTodayTasks }) {
           }
         });
         setTodayTasks([...todayTasks]);
+        isTaskLoading = false;
       });
-      request.catch(() => alert("Erro ao atualizar tarefa"));
+      request.catch(() => {
+        alert("Erro ao atualizar tarefa");
+        isTaskLoading = false;
+      });
     }
   }
 
