@@ -1,10 +1,29 @@
+import axios from "axios";
+import { useContext } from "react";
 import { TrashOutline } from "react-ionicons";
+import UserContext from "../contexts/UserContext";
 import Day from "../styled/Day";
 import Task from "../styled/Task";
 import TaskTitle from "../styled/TaskTitle";
 
 export default function AllTasksList({ allTasks, setAllTasks }) {
-  console.log(allTasks);
+  const { user } = useContext(UserContext);
+  function deleteTask(task) {
+    if (window.confirm("Deseja deletar o hábito?")) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const request = axios.delete(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${task.id}`,
+        config
+      );
+      setAllTasks(allTasks.filter((t) => t.id !== task.id));
+    } else {
+      return;
+    }
+  }
   return (
     <>
       {allTasks.map((t) => {
@@ -20,7 +39,7 @@ export default function AllTasksList({ allTasks, setAllTasks }) {
               <Day days={t.days.includes(5)}>S</Day>
               <Day days={t.days.includes(6)}>S</Day>
             </div>
-            {<TrashOutline />}
+            {<TrashOutline onClick={() => deleteTask(t)} />}
           </Task>
         );
       })}
