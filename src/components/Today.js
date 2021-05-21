@@ -1,18 +1,21 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 
 import Navbar from "./Navbar";
 import Container from "../styled/Container";
 import PageTitle from "../styled/PageTitle";
-import PageSubtitle from "../styled/PageSubtitle";
 import BottomBar from "./BottomBar";
 import UserContext from "../contexts/UserContext";
 import Loading from "./Loading";
 import TaskList from "./TaskList";
+import PageSubtitle from "../styled/PageSubtitle";
+import TasksContext from "../contexts/TasksContext";
 
 export default function Today() {
-  const [tasks, setTasks] = useState([]);
   const { user } = useContext(UserContext);
+  const { todayTasks, setTodayTasks } = useContext(TasksContext);
 
   useEffect(() => {
     const config = {
@@ -28,28 +31,29 @@ export default function Today() {
 
     request.then((response) => {
       if (response.data.length === 0) {
-        setTasks([null]);
+        setTodayTasks([null]);
       } else {
-        setTasks(response.data);
+        setTodayTasks(response.data);
       }
       console.log(response.data);
     });
 
     request.catch((error) => console.log(error.response));
-  }, [user.token]);
+  }, [user.token, setTodayTasks]);
+
+  const currentDate = dayjs().locale("pt-br").format("dddd, DD/MM");
 
   return (
     <>
       <Navbar />
       <Container>
-        <PageTitle>Quarta, 19/05</PageTitle>
-        <PageSubtitle> Nenhum hábito concluído ainda </PageSubtitle>
-        {tasks.length === 0 ? (
+        <PageTitle>{currentDate}</PageTitle>
+        {todayTasks.length === 0 ? (
           <Loading />
-        ) : tasks[0] !== null ? (
-          <TaskList tasks={tasks} />
+        ) : todayTasks[0] !== null ? (
+          <TaskList />
         ) : (
-          ""
+          <PageSubtitle>Nenhum hábito concluído ainda</PageSubtitle>
         )}
       </Container>
       <BottomBar />

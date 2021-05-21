@@ -8,9 +8,12 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Today from "./Today";
 import Habits from "./Habits";
+import History from "./History";
+import TasksContext from "../contexts/TasksContext";
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [todayTasks, setTodayTasks] = useState([]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -22,16 +25,18 @@ export default function App() {
           <Route path="/signup" exact>
             <SignUp />
           </Route>
+          <TasksContext.Provider value={{ todayTasks, setTodayTasks }}>
+            <Route path="/today" exact>
+              <Today />
+            </Route>
+            <Route path="/habits" exact>
+              <Habits />
+            </Route>
+            <Route path="/history" exact>
+              <History />
+            </Route>
+          </TasksContext.Provider>
         </Switch>
-        <Route path="/today" exact>
-          <Today />
-        </Route>
-        <Route path="/habits" exact>
-          <Habits />
-        </Route>
-        {/* <Route path="/history" exact>
-            <History />
-          </Route> */}
       </BrowserRouter>
     </UserContext.Provider>
   );
