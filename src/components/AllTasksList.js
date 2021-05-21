@@ -8,6 +8,7 @@ import TaskTitle from "../styled/TaskTitle";
 
 export default function AllTasksList({ allTasks, setAllTasks }) {
   const { user } = useContext(UserContext);
+
   function deleteTask(task) {
     if (window.confirm("Deseja deletar o hábito?")) {
       const config = {
@@ -24,6 +25,7 @@ export default function AllTasksList({ allTasks, setAllTasks }) {
       return;
     }
   }
+
   return (
     <>
       {allTasks.map((t) => {

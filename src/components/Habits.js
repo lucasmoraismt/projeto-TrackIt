@@ -30,7 +30,6 @@ export default function Habits() {
 
     request.then((response) => {
       setAllTasks(response.data);
-      console.log(response.data);
     });
 
     request.catch((error) => console.log(error.response));

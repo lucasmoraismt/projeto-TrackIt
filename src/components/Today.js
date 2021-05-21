@@ -15,7 +15,6 @@ import TasksContext from "../contexts/TasksContext";
 
 export default function Today() {
   const { user } = useContext(UserContext);
-  const { ratio, setRatio } = useContext(TasksContext);
   const [todayTasks, setTodayTasks] = useState([]);
 
   useEffect(() => {
@@ -32,7 +31,6 @@ export default function Today() {
 
     request.then((response) => {
       setTodayTasks(response.data);
-      console.log(response.data);
     });
 
     request.catch((error) => console.log(error.response));

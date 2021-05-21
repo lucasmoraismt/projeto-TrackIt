@@ -134,3 +134,12 @@ a {
 * {
   box-sizing: border-box;
 }
+.CircularProgressbar-path {
+  transition: stroke-dashoffset 0.5s ease 0s;
+  stroke-linecap: round;
+}
+.CircularProgressbar-text {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-size: 20px;
+}

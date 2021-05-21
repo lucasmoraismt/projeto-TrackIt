@@ -18,14 +18,9 @@ export default function Login() {
   const { setUser } = useContext(UserContext);
   let history = useHistory();
 
-  if (!!localStorage.token) {
-    const token = localStorage.getItem("token");
-    const image = localStorage.getItem("image");
-    const newUser = {
-      token: token,
-      image: image,
-    };
-    setUser(newUser);
+  if (!!localStorage.user) {
+    const userObject = JSON.parse(localStorage.getItem("user"));
+    setUser(userObject);
     history.push("/today");
   }
 
@@ -43,8 +38,7 @@ export default function Login() {
 
     request.then((response) => {
       setUser(response.data);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("image", response.data.image);
+      localStorage.setItem("user", JSON.stringify(response.data));
       history.push("/today");
     });
     request.catch((error) => {
