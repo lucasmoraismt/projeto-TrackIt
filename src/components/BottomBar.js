@@ -5,14 +5,8 @@ import styled from "styled-components";
 import TasksContext from "../contexts/TasksContext";
 
 export default function BottomBar() {
-  const { todayTasks } = useContext(TasksContext);
-  const [ratio, setRatio] = useState(0);
+  const { ratio } = useContext(TasksContext);
 
-  if (todayTasks.length > 0) {
-    let done = todayTasks.reduce((acc, task) => (task.done ? acc++ : acc));
-    let percentage = (done / todayTasks.length).toFixed(0);
-    setRatio(percentage);
-  }
   return (
     <Bottom>
       <Link to="/habits">

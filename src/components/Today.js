@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
@@ -15,7 +15,9 @@ import TasksContext from "../contexts/TasksContext";
 
 export default function Today() {
   const { user } = useContext(UserContext);
-  const { todayTasks, setTodayTasks } = useContext(TasksContext);
+  const { ratio, setRatio } = useContext(TasksContext);
+  const [todayTasks, setTodayTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState([]);
 
   useEffect(() => {
     const config = {
@@ -30,6 +32,7 @@ export default function Today() {
     );
 
     request.then((response) => {
+      setTodayTasks(response.data);
       console.log(response.data);
     });
 
@@ -46,7 +49,7 @@ export default function Today() {
         {todayTasks.length === 0 ? (
           <Loading />
         ) : todayTasks[0] !== null ? (
-          <TaskList />
+          <TaskList todayTasks={todayTasks} setTodayTasks={setTodayTasks} />
         ) : (
           <PageSubtitle>Nenhum hábito concluído ainda</PageSubtitle>
         )}

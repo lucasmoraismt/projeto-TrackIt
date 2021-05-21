@@ -2,16 +2,21 @@ import Task from "../styled/Task";
 import TaskTitle from "../styled/TaskTitle";
 import TaskSubtitle from "../styled/TaskSubtitle";
 import { Checkbox } from "react-ionicons";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import PageSubtitle from "../styled/PageSubtitle";
 import TasksContext from "../contexts/TasksContext";
 
-export default function TaskList() {
+export default function TaskList({ todayTasks, setTodayTasks }) {
   const { user } = useContext(UserContext);
-  const { todayTasks, setTodayTasks } = useContext(TasksContext);
+  const { ratio, setRatio } = useContext(TasksContext);
+  let tasksNumber = todayTasks.length;
+  let tasksDone = todayTasks.reduce((acc, t) => (t.done ? (acc += 1) : acc), 0);
 
+  useEffect(() => setRatio(Math.round((100 * tasksDone) / tasksNumber)));
+
+  console.log(tasksDone, ratio);
   function toggle(task) {
     const config = {
       headers: {
@@ -30,9 +35,11 @@ export default function TaskList() {
         todayTasks.forEach((t) => {
           if (t.id === task.id) {
             t.done = false;
+            t.currentSequence -= 1;
           }
         });
         setTodayTasks([...todayTasks]);
+        setRatio(((100 * tasksDone) / todayTasks.length).toFixed(0));
       });
       request.catch(() => alert("Erro ao atualizar tarefa"));
     } else {
@@ -46,6 +53,10 @@ export default function TaskList() {
         todayTasks.forEach((t) => {
           if (t.id === task.id) {
             t.done = true;
+            if (t.currentSequence === t.highestSequence) {
+              t.highestSequence += 1;
+            }
+            t.currentSequence += 1;
           }
         });
         setTodayTasks([...todayTasks]);
@@ -54,19 +65,12 @@ export default function TaskList() {
     }
   }
 
-  let tasksDone = todayTasks.reduce((acc, t) =>
-    t.done === true ? acc++ : acc
-  );
-  console.log(todayTasks, tasksDone);
-
   return (
     <>
-      <PageSubtitle>
+      <PageSubtitle progress={tasksDone > 0}>
         {tasksDone === 0
           ? "Nenhum hábito concluído ainda"
-          : `${(tasksDone / todayTasks.length).toFixed(
-              0
-            )}% dos hábitos concluídos`}
+          : `${ratio}% dos hábitos concluídos`}
       </PageSubtitle>
       {todayTasks.map((t) => {
         return (
