@@ -1,7 +1,9 @@
 import axios from "axios";
+import dayjs from "dayjs";
 import { useContext, useState } from "react";
 import Loader from "react-loader-spinner";
 import styled, { css } from "styled-components";
+import TasksContext from "../contexts/TasksContext";
 import UserContext from "../contexts/UserContext";
 import Day from "../styled/Day";
 import Input from "../styled/Input";
@@ -14,25 +16,27 @@ export default function CreateTask({
   setAllTasks,
 }) {
   const { user } = useContext(UserContext);
+  const { todayTasks, setTodayTasks } = useContext(TasksContext);
   const [isDisabled, setIsDisabled] = useState(false);
   const [name, setName] = useState("");
+  const dayNumber = dayjs().format("d");
+
   let taskObject = {
     name,
     days: newTask.days,
   };
+  let newDays = [];
 
-  function toggle(id, isDisabled) {
-    if (isDisabled) {
-      return;
-    }
+  function toggle(id) {
     if (!newTask.days.includes(id)) {
+      newDays.push(id);
       taskObject = {
         name: name,
         days: [...newTask.days, id],
       };
       setNewTask(taskObject);
     } else {
-      const newDays = newTask.days.filter((d) => d !== id);
+      newDays = newTask.days.filter((d) => d !== id);
       taskObject = {
         name: name,
         days: newDays,
@@ -65,8 +69,18 @@ export default function CreateTask({
       config
     );
 
-    request.then(() => {
-      setAllTasks([...allTasks, body]);
+    request.then((response) => {
+      setAllTasks([...allTasks, response.data]);
+      if (newDays.includes(dayNumber)) {
+        const newTodayTask = {
+          id: response.data.id,
+          name: response.data.name,
+          days: response.data.days,
+          currentSequence: 0,
+          highestSequence: 0,
+        };
+        setTodayTasks([...todayTasks, newTodayTask]);
+      }
       setName("");
       setNewTask({ name: "", days: [] });
       setIsDisabled(false);
@@ -105,49 +119,56 @@ export default function CreateTask({
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(0)}
-          onClick={() => toggle(0, isDisabled)}
+          onClick={() => toggle(0)}
+          disabled={isDisabled}
         >
           D
         </Day>
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(1)}
-          onClick={() => toggle(1, isDisabled)}
+          onClick={() => toggle(1)}
+          disabled={isDisabled}
         >
           S
         </Day>
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(2)}
-          onClick={() => toggle(2, isDisabled)}
+          onClick={() => toggle(2)}
+          disabled={isDisabled}
         >
           T
         </Day>
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(3)}
-          onClick={() => toggle(3, isDisabled)}
+          onClick={() => toggle(3)}
+          disabled={isDisabled}
         >
           Q
         </Day>
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(4)}
-          onClick={() => toggle(4, isDisabled)}
+          onClick={() => toggle(4)}
+          disabled={isDisabled}
         >
           Q
         </Day>
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(5)}
-          onClick={() => toggle(5, isDisabled)}
+          onClick={() => toggle(5)}
+          disabled={isDisabled}
         >
           S
         </Day>
         <Day
           isDisabled={isDisabled}
           days={newTask.days.includes(6)}
-          onClick={() => toggle(6, isDisabled)}
+          onClick={() => toggle(6)}
+          disabled={isDisabled}
         >
           S
         </Day>

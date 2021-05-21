@@ -6,7 +6,12 @@ import Day from "../styled/Day";
 import Task from "../styled/Task";
 import TaskTitle from "../styled/TaskTitle";
 
-export default function AllTasksList({ allTasks, setAllTasks }) {
+export default function AllTasksList({
+  allTasks,
+  setAllTasks,
+  todayTasks,
+  setTodayTasks,
+}) {
   const { user } = useContext(UserContext);
 
   function deleteTask(task) {
@@ -20,7 +25,14 @@ export default function AllTasksList({ allTasks, setAllTasks }) {
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${task.id}`,
         config
       );
-      setAllTasks(allTasks.filter((t) => t.id !== task.id));
+      request.then(() => {
+        setAllTasks(allTasks.filter((t) => t.id !== task.id));
+        if (todayTasks.length > 0 && todayTasks[0].id === task.id) {
+          const newTodayTasks = todayTasks.filter((t) => t.id !== task.id);
+          setTodayTasks(newTodayTasks);
+        }
+      });
+      request.catch(() => alert("Erro ao excluir hábito"));
     } else {
       return;
     }

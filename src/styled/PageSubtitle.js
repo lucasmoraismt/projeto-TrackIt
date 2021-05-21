@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const PageSubtitle = styled.p`
   margin-bottom: 25px;

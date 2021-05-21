@@ -15,7 +15,7 @@ export default function Navbar() {
 
 const Header = styled.div`
   position: fixed;
-  width: 375px;
+  width: 100vw;
   height: 70px;
   left: 0px;
   top: 0px;
@@ -24,6 +24,7 @@ const Header = styled.div`
   align-items: center;
   background: #126ba5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  z-index: 2;
 
   img {
     width: 51px;

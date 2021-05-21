@@ -9,12 +9,27 @@ import PageTitle from "../styled/PageTitle";
 import AllTasksList from "./AllTasksList";
 import BottomBar from "./BottomBar";
 import CreateTask from "./CreateTask";
+import TasksContext from "../contexts/TasksContext";
 
 export default function Habits() {
   const { user } = useContext(UserContext);
   const [isCreating, setIsCreating] = useState(false);
   const [allTasks, setAllTasks] = useState([]);
   const [newTask, setNewTask] = useState({ name: "", days: [] });
+  const { setRatio, todayTasks, setTodayTasks } = useContext(TasksContext);
+
+  useEffect(() => {
+    let tasksNumber = todayTasks.length;
+    let tasksDone = todayTasks.reduce(
+      (acc, t) => (t.done ? (acc += 1) : acc),
+      0
+    );
+    if (tasksNumber > 0) {
+      setRatio(Math.round((100 * tasksDone) / tasksNumber));
+    } else if (tasksNumber === 0) {
+      setRatio(0);
+    }
+  }, []);
 
   useEffect(() => {
     const config = {
@@ -47,10 +62,10 @@ export default function Habits() {
     <>
       <Navbar />
       <Container>
-        <nav>
+        <Nav>
           <PageTitle>Meus hábitos</PageTitle>
           <Add onClick={create}>+</Add>
-        </nav>
+        </Nav>
         {isCreating ? (
           <CreateTask
             newTask={newTask}
@@ -68,7 +83,12 @@ export default function Habits() {
             começar a trackear!
           </Message>
         ) : (
-          <AllTasksList allTasks={allTasks} setAllTasks={setAllTasks} />
+          <AllTasksList
+            allTasks={allTasks}
+            setAllTasks={setAllTasks}
+            todayTasks={todayTasks}
+            setTodayTasks={setTodayTasks}
+          />
         )}
       </Container>
       <BottomBar />
@@ -91,4 +111,11 @@ const Message = styled.p`
   font-size: 18px;
   line-height: 22px;
   color: #666666;
+`;
+
+const Nav = styled.nav`
+  width: 320px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 `;

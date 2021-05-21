@@ -14,6 +14,7 @@ import TasksContext from "../contexts/TasksContext";
 export default function App() {
   const [user, setUser] = useState(null);
   const [ratio, setRatio] = useState(0);
+  const [todayTasks, setTodayTasks] = useState([]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -25,7 +26,9 @@ export default function App() {
           <Route path="/signup" exact>
             <SignUp />
           </Route>
-          <TasksContext.Provider value={{ ratio, setRatio }}>
+          <TasksContext.Provider
+            value={{ ratio, setRatio, todayTasks, setTodayTasks }}
+          >
             <Route path="/today" exact>
               <Today />
             </Route>

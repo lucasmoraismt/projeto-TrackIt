@@ -4,11 +4,18 @@ const Container = styled.div`
   padding: 25px 18px 30px;
   margin: 70px 0px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  nav {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  .redDay {
+    background-color: #e85666;
+  }
+  .greenDay {
+    background-color: #8cc654;
+  }
+  .normal {
+    background-color: #fff;
   }
 `;
 

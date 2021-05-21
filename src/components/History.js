@@ -1,8 +1,9 @@
+import "../../node_modules/react-calendar/dist/Calendar.css";
 import Navbar from "../components/Navbar";
 import Container from "../styled/Container";
-import PageSubtitle from "../styled/PageSubtitle";
 import PageTitle from "../styled/PageTitle";
 import BottomBar from "./BottomBar";
+import PageSubtitle from "../styled/PageSubtitle";
 
 export default function History() {
   return (

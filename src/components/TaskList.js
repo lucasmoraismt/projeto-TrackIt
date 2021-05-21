@@ -8,13 +8,20 @@ import axios from "axios";
 import PageSubtitle from "../styled/PageSubtitle";
 import TasksContext from "../contexts/TasksContext";
 
-export default function TaskList({ todayTasks, setTodayTasks }) {
+export default function TaskList() {
   const { user } = useContext(UserContext);
-  const { ratio, setRatio } = useContext(TasksContext);
+  const { ratio, setRatio, todayTasks, setTodayTasks } =
+    useContext(TasksContext);
   let tasksNumber = todayTasks.length;
   let tasksDone = todayTasks.reduce((acc, t) => (t.done ? (acc += 1) : acc), 0);
 
-  useEffect(() => setRatio(Math.round((100 * tasksDone) / tasksNumber)));
+  useEffect(() => {
+    if (tasksNumber > 0) {
+      setRatio(Math.round((100 * tasksDone) / tasksNumber));
+    } else if (tasksNumber === 0) {
+      setRatio(0);
+    }
+  });
   let isTaskLoading = false;
 
   function toggle(task) {

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Task = styled.div`
-  width: 340px;
+  width: 90vw;
   height: 94px;
   background: #fff;
   border-radius: 5px;
