@@ -57,6 +57,8 @@ export default function Habits() {
             newTask={newTask}
             setNewTask={setNewTask}
             setIsCreating={setIsCreating}
+            allTasks={allTasks}
+            setAllTasks={setAllTasks}
           />
         ) : (
           ""

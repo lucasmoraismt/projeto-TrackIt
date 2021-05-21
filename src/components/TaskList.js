@@ -18,37 +18,51 @@ export default function TaskList() {
         Authorization: `Bearer ${user.token}`,
       },
     };
+    const data = task;
     if (task.done) {
       const request = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${task.id}/uncheck`,
+        data,
         config
       );
 
-      request.then((response) => {
-        setTodayTasks(response.data);
+      request.then(() => {
+        todayTasks.forEach((t) => {
+          if (t.id === task.id) {
+            t.done = false;
+          }
+        });
+        setTodayTasks([...todayTasks]);
       });
-      request.catch(() => console.log("Erro ao atualizar tarefa"));
+      request.catch(() => alert("Erro ao atualizar tarefa"));
     } else {
       const request = axios.post(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${task.id}/check`,
+        data,
         config
       );
 
-      request.then((response) => {
-        setTodayTasks(response.data);
+      request.then(() => {
+        todayTasks.forEach((t) => {
+          if (t.id === task.id) {
+            t.done = true;
+          }
+        });
+        setTodayTasks([...todayTasks]);
       });
-      request.catch(() => console.log("Erro ao atualizar tarefa"));
+      request.catch(() => alert("Erro ao atualizar tarefa"));
     }
   }
 
   let tasksDone = todayTasks.reduce((acc, t) =>
     t.done === true ? acc++ : acc
   );
+  console.log(todayTasks, tasksDone);
 
   return (
     <>
       <PageSubtitle>
-        {tasksDone > 0
+        {tasksDone === 0
           ? "Nenhum hábito concluído ainda"
           : `${(tasksDone / todayTasks.length).toFixed(
               0
@@ -60,16 +74,18 @@ export default function TaskList() {
             <div>
               <TaskTitle>{t.name}</TaskTitle>
               <TaskSubtitle checked={t.done}>
-                Sequência atual: <span>{t.currentSequence} dias</span>
+                Sequência atual:{" "}
+                <span>
+                  {t.currentSequence} {t.currentSequence === 1 ? "dia" : "dias"}
+                </span>
               </TaskSubtitle>
               <TaskSubtitle
-                checked={
-                  t.done && t.currentSequence === t.highestSequence
-                    ? true
-                    : false
-                }
+                checked={t.done && t.currentSequence === t.highestSequence}
               >
-                Seu recorde: <span>{t.highestSequence} dias</span>
+                Seu recorde:{" "}
+                <span>
+                  {t.highestSequence} {t.highestSequence === 1 ? "dia" : "dias"}
+                </span>
               </TaskSubtitle>
             </div>
             <Checkbox

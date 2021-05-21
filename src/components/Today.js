@@ -30,11 +30,6 @@ export default function Today() {
     );
 
     request.then((response) => {
-      if (response.data.length === 0) {
-        setTodayTasks([null]);
-      } else {
-        setTodayTasks(response.data);
-      }
       console.log(response.data);
     });
 

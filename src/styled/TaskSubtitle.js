@@ -1,17 +1,9 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const TaskSubtitle = styled.p`
   font-size: 13px;
   line-height: 16px;
-  color: #666;
-
-  span {
-    ${(props) =>
-      props.clicked &&
-      css`
-        color: #8fc549;
-      `};
-  }
+  color: ${(props) => (props.clicked ? "#8fc549" : "#666")};
 `;
 
 export default TaskSubtitle;

@@ -1,10 +1,19 @@
-import { useState } from "react";
+import axios from "axios";
+import { useContext, useState } from "react";
 import Loader from "react-loader-spinner";
 import styled, { css } from "styled-components";
+import UserContext from "../contexts/UserContext";
 import Day from "../styled/Day";
 import Input from "../styled/Input";
 
-export default function CreateTask({ newTask, setNewTask, setIsCreating }) {
+export default function CreateTask({
+  newTask,
+  setNewTask,
+  setIsCreating,
+  allTasks,
+  setAllTasks,
+}) {
+  const { user } = useContext(UserContext);
   const [isDisabled, setIsDisabled] = useState(false);
   const [name, setName] = useState("");
   let taskObject = {
@@ -33,7 +42,40 @@ export default function CreateTask({ newTask, setNewTask, setIsCreating }) {
   }
 
   function addTask() {
+    if (newTask.name.length === 0 || taskObject.days.length === 0) {
+      if (taskObject.name.length === 0) {
+        alert("Insira um título para o hábito");
+      }
+      if (taskObject.days.length === 0) {
+        alert("Selecione pelo menos um dia");
+      }
+      return;
+    }
     setIsDisabled(true);
+
+    const body = newTask;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const request = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      body,
+      config
+    );
+
+    request.then(() => {
+      setAllTasks([...allTasks, body]);
+      setName("");
+      setNewTask({ name: "", days: [] });
+      setIsDisabled(false);
+      setIsCreating(false);
+    });
+    request.catch((error) => {
+      alert("Erro ao criar hábito");
+      setIsDisabled(false);
+    });
   }
 
   function close() {

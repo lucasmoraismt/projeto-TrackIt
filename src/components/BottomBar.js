@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -6,15 +6,12 @@ import TasksContext from "../contexts/TasksContext";
 
 export default function BottomBar() {
   const { todayTasks } = useContext(TasksContext);
-  let ratio = 0;
-  if (todayTasks[0] !== null) {
-    let done = 0;
-    todayTasks.forEach((t) => {
-      if (t.done === true) {
-        done++;
-      }
-    });
-    ratio = (done / todayTasks).toFixed(0);
+  const [ratio, setRatio] = useState(0);
+
+  if (todayTasks.length > 0) {
+    let done = todayTasks.reduce((acc, task) => (task.done ? acc++ : acc));
+    let percentage = (done / todayTasks.length).toFixed(0);
+    setRatio(percentage);
   }
   return (
     <Bottom>
